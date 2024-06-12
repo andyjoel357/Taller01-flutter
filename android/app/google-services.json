@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "338711173202",
+    "firebase_url": "https://prueba1-45273-default-rtdb.firebaseio.com",
+    "project_id": "prueba1-45273",
+    "storage_bucket": "prueba1-45273.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338711173202:android:1e07aaae209f7122b8278b",
+        "android_client_info": {
+          "package_name": "com.example.fire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM050NtmpbkI5WQglvFaY61wtH2L49gkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338711173202:android:6c2c5441c7129527b8278b",
+        "android_client_info": {
+          "package_name": "com.example.flutter_taller_01"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM050NtmpbkI5WQglvFaY61wtH2L49gkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

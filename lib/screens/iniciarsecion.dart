@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_taller_01/screens/cartelera.dart';
 
 void main() {
   runApp(Aplicacion02());
@@ -10,6 +12,7 @@ class Aplicacion02 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Cuerpo(),
     );
   }
@@ -23,92 +26,93 @@ class Cuerpo extends StatefulWidget {
 }
 
 class _CuerpoState extends State<Cuerpo> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      appBar: AppBar(
-        title: Text("Titulo superior")
-      ),
-      
-      body: Body(),
-      
+      appBar: AppBar(title: Text("Titulo superior")),
+      body: Body(context),
     );
   }
 }
 
-Widget Body() {
+Widget Body(context) {
   return Container(
-    decoration: const BoxDecoration( 
-      image: DecorationImage( 
-        image: NetworkImage("https://images3.alphacoders.com/132/1322308.jpeg"),
-        fit: BoxFit.cover
-       )
-
-    ) ,
+    decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: NetworkImage(
+                "https://images3.alphacoders.com/132/1322308.jpeg"),
+            fit: BoxFit.cover)),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Usuario(), 
+        Usuario(),
         Password(),
-        Boton(),
- 
-        ],
+        Boton(context),
+      ],
     ),
   );
 }
 
-// ignore: non_constant_identifier_names
+final TextEditingController _user = TextEditingController();
 Widget Usuario() {
   return Container(
-    padding: EdgeInsets.all(20),
-      child: const TextField(
-    decoration: InputDecoration(
-        hintText: "Ingrese nickname", fillColor: Colors.grey, filled: true),
-  ));
+      padding: EdgeInsets.all(20),
+      child: TextField(
+        controller: _user,
+        decoration: InputDecoration(
+            hintText: "Ingrese nickname", fillColor: Colors.grey, filled: true),
+      ));
 }
 
-// ignore: non_constant_identifier_names
-Widget Password( ) {
-
+final TextEditingController _pass = TextEditingController();
+Widget Password() {
   return Column(
     children: [
       Container(
-        decoration: BoxDecoration( 
-          borderRadius: BorderRadius.circular(60)
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(60)),
         padding: const EdgeInsets.all(20),
-        child:  TextField(
-          controller: _controller,
+        child: TextField(
+          controller: _pass,
           obscureText: true,
           decoration: const InputDecoration(
-              hintText: 'Ingrese Contraseña',
-              fillColor: Colors.grey,
-              filled: true,
-              border: InputBorder.none, )
-              ,
-              keyboardType: TextInputType.number,
-              
+            hintText: 'Ingrese Contraseña',
+            fillColor: Colors.grey,
+            filled: true,
+            border: InputBorder.none,
+          ),
+          keyboardType: TextInputType.number,
         ),
       ),
     ],
   );
 }
 
-Widget Boton(){
+Widget Boton(context) {
   return Container(
-
     child: ElevatedButton(
-      onPressed:() {
-        //imprimir();
-        
-        print(_controller.text);
-      },
-       child: Text("Login"),
-       style: ElevatedButton.styleFrom( backgroundColor: Colors.amber )
-    ),
+        onPressed: () {
+          //imprimir();
+          login(context);
+        },
+        child: Text("Login"),
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.amber)),
   );
 }
 
 final TextEditingController _controller = TextEditingController();
+Future<void> login(context) async {
+  try {
+    final credential = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: _user.text, password: _pass.text);
+    //////////////////
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Cartelera()));
+    ///////////////////
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'user-not-found') {
+      print('No user found for that email.');
+    } else if (e.code == 'wrong-password') {
+      print('Wrong password provided for that user.');
+    }
+  }
+}

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taller_01/screens/iniciarsecion.dart';
 import 'package:flutter_taller_01/screens/registrarse.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MainApp());
 }
 
@@ -11,13 +14,22 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.black,
+        colorScheme: ColorScheme.light(
+          secondary: Colors.redAccent, // Set the accent color here
+        ),
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          bodyMedium: TextStyle(fontSize: 18),
+        ),
+      ),
       home: Home(),
     );
   }
 }
-
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -29,7 +41,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: Cuerpo(context),
     );
   }
@@ -40,7 +51,7 @@ Widget Cuerpo(context) {
     decoration: BoxDecoration(
       image: DecorationImage(
         image: NetworkImage(
-            "https://media.istockphoto.com/id/1303344250/es/foto/streaming-de-televisi%C3%B3n-concepto-de-pared-multimedia.jpg?s=1024x1024&w=is&k=20&c=YehKtFDeq-q0Vw6R8Q3VWefATgmH888T21MDrhBhc4Y="),
+            "https://images.pexels.com/photos/1723637/pexels-photo-1723637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
         fit: BoxFit.cover,
       ),
     ),
@@ -50,15 +61,11 @@ Widget Cuerpo(context) {
         Text(
           "Este es un servicio de streaming que ofrece una gran variedad de películas, series y documentales premiados en casi cualquier pantalla conectada a internet",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 24, 24, 24),
-          ),
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
-        SizedBox(height: 20), // espacio entre el texto y los botones
+        SizedBox(height: 40), // espacio entre el texto y los botones
         IniciarSecion(context),
-        SizedBox(height: 10), // espacio entre los botones
+        SizedBox(height: 20), // espacio entre los botones
         Registro(context),
       ],
     ),
@@ -67,18 +74,35 @@ Widget Cuerpo(context) {
 
 Widget IniciarSecion(context) {
   return Container(
-    child:
-        ElevatedButton(onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>Aplicacion02()));
-        }, child: Text("Iniciar Secion"), 
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.black),),
+    width: 200,
+    child: ElevatedButton(
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Aplicacion02()));
+      },
+      child: Text("Iniciar Sesión"),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).primaryColor, // Use backgroundColor instead of primary
+        foregroundColor: Colors.white, // Use foregroundColor instead of onPrimary
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    ),
   );
 }
 
 Widget Registro(context) {
-  return(
-   FilledButton(onPressed: (){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>Registrarse()));
-   }, child: const Text("Registrarse"))
+  return Container(
+    width: 200,
+    child: OutlinedButton(
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Registrarse()));
+      },
+      child: Text("Registrarse"),
+      style: OutlinedButton.styleFrom(
+        foregroundColor: Theme.of(context).colorScheme.secondary, // Use foregroundColor instead of primary
+        side: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 2), // Use colorScheme.secondary instead of accentColor
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    ),
   );
 }
