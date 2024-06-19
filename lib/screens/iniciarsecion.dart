@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_taller_01/screens/cartelera.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future<void> main() async {
   runApp(Aplicacion02());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 }
 
 class Aplicacion02 extends StatelessWidget {
@@ -80,7 +83,6 @@ Widget Password() {
             filled: true,
             border: InputBorder.none,
           ),
-          keyboardType: TextInputType.number,
         ),
       ),
     ],
@@ -102,12 +104,13 @@ Widget Boton(context) {
 final TextEditingController _controller = TextEditingController();
 Future<void> login(context) async {
   try {
-    final credential = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: _user.text, password: _pass.text);
-    //////////////////
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Cartelera()));
-    ///////////////////
+    if (_user.text != null) {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: _user.text, password: _pass.text);
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Cartelera()));
+    } else {}
   } on FirebaseAuthException catch (e) {
     if (e.code == 'user-not-found') {
       print('No user found for that email.');

@@ -10,6 +10,7 @@ dependencies:
   firebase_auth: ^5.1.0
   flutter:
     sdk: flutter
+  video_player: ^2.8.7
 
 dev_dependencies:
   flutter_test:

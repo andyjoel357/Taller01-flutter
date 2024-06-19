@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_taller_01/screens/iniciarsecion.dart';
@@ -11,15 +13,15 @@ class Registrarse extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Registrarse',
       theme: ThemeData(
         primaryColor: Colors.blue,
-       colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.blue,
-        secondary: Colors.blueAccent,
-      ),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          secondary: Colors.blueAccent,
+        ),
       ),
       home: Home(),
     );
@@ -120,18 +122,15 @@ Widget BotonReg(context) {
 
 Future<void> registrarse(context) async {
   try {
-    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: _users.text,
-      password: _password.text,
-    );
+    if (_users.text != null) {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _users.text,
+        password: _password.text,
+      );
+      navegador(context);
+    } else {}
     /////////////////////
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Aplicacion02(),
-      ),
-    );
-    /// 
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
       print('The password provided is too weak.');
@@ -141,4 +140,13 @@ Future<void> registrarse(context) async {
   } catch (e) {
     print(e);
   }
+}
+
+void navegador(context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => Aplicacion02(),
+    ),
+  );
 }
