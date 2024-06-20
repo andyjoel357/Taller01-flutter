@@ -1,7 +1,11 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_taller_01/screens/Video.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(Cartelera());
 }
 
@@ -25,36 +29,78 @@ class Carteleras extends StatefulWidget {
 }
 
 class _CartelerasState extends State<Carteleras> {
+  List<Map<dynamic, dynamic>> peliculasList = [];
   @override
+    void initState() {
+    super.initState();
+    getData();
+  }
+   void getData() async {
+    
+    DatabaseReference productoRef = FirebaseDatabase.instance.ref('peliculas');
+    productoRef.onValue.listen((DatabaseEvent event) {
+      final data = event.snapshot.value;
+      updateProductList(data);
+    });
+  }
+    void updateProductList(dynamic data) {
+    List<Map<dynamic, dynamic>> tempList = [];
+
+    data.forEach((key, element) {
+      //////////////////////////////////////////
+      /// Se asigna la clave y valor a la lista temporal
+      //////////////////////////////////////////
+      tempList.add({
+        "titulo": element['titulo'],
+        "imagen": element['imagen'],
+        "video": element['video'], 
+      });
+    });
+
+    setState(() {
+      peliculasList = tempList;
+    });
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Carteleras'),
+        backgroundColor: Colors.blue, // Cambia el color de fondo de la appBar
+        elevation: 0,
       ),
-      body: Body(),
+      body: Body(peliculasList: peliculasList),
     );
   }
+  
 }
 
 class Body extends StatelessWidget {
+
   final List<Map<String, String>> movies = [
     {
-      "title": "Deadóol 3",
+      "title": "grand theft auto v",
       "image":
-          "https://cdnb.artstation.com/p/assets/images/images/050/326/635/large/rahal-nejraoui-deapdool-3-poster-4-by-rahalarts.jpg?1654601588"
+          "https://cdn1.epicgames.com/0584d2013f0149a791e7b9bad0eec102/offer/GTAV_EGS_Artwork_1200x1600_Portrait%20Store%20Banner-1200x1600-382243057711adf80322ed2aeea42191.jpg",
+        "video":"https://firebasestorage.googleapis.com/v0/b/prueba1-45273.appspot.com/o/Movies%2FGrand%20Theft%20Auto%20V%20Trailer%20(1).mp4?alt=media&token=cd4ffa8e-cade-40cf-95f6-b16c03eb61bc"
     },
     {
-      "title": "Sonic 2",
+      "title": "Minions",
       "image":
-          "https://pics.filmaffinity.com/Sonic_2_La_pelaicula-456166633-large.jpg"
+          "https://static.wikia.nocookie.net/doblaje/images/2/25/Minions_nace_un_nuevo_villano_poster_final.png/revision/latest?cb=20220612175049&path-prefix=es",
+                  "video":"https://firebasestorage.googleapis.com/v0/b/prueba1-45273.appspot.com/o/Movies%2FMinions%20Nace%20un%20Villano%20%E2%80%93%20Tr%C3%A1iler%20Oficial%20(Universal%20Pictures)%20HD.mp4?alt=media&token=c9e3e296-0365-4772-96da-c7b7898dcdbe"
+
     },
     {
-      "title": "La gritona",
+      "title": "Transformers 7",
       "image":
-          "https://losmitosyleyendas.com/wp-content/uploads/2024/02/image-87.jpg"
+          "https://i.pinimg.com/474x/e3/f5/63/e3f563526ed3c56f26de228f273cdb59.jpg",
+                  "video":"https://firebasestorage.googleapis.com/v0/b/prueba1-45273.appspot.com/o/Movies%2FTRANSFORMERS%207%20EL%20DESPERTAR%20DE%20LAS%20BESTIAS%20Tr%C3%A1iler%20Espa%C3%B1ol%20Latino%20(2023)%20%E1%B4%B4%E1%B4%B0.mp4?alt=media&token=9305e1a1-b53b-4f0c-9194-859a93cd523a"
+
     },
   ];
+  final List<Map<dynamic, dynamic>> peliculasList;
 
+  Body({required this.peliculasList});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +131,7 @@ class Body extends StatelessWidget {
                     children: <Widget>[
                       FutureBuilder(
                         future: precacheImage(
-                          NetworkImage(movies[index]["image"]!),
+                          NetworkImage(""),
                           context,
                         ),
                         builder: (BuildContext context,
@@ -119,9 +165,18 @@ class Body extends StatelessWidget {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
                                 image: DecorationImage(
-                                  image: NetworkImage(movies[index]["image"]!),
+                                  image: NetworkImage(""),
                                   fit: BoxFit.cover,
                                 ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
                               ),
                             );
                           }
@@ -160,11 +215,29 @@ class Body extends StatelessWidget {
                   ),
                   title: Text(movies[index]["title"]!),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Video(),
+                        print(movies[index]["video"]);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VideoPlayerScreen(
+                                videoUrl: movies[index]["video"].toString()),
+                          ),
+                        );
+                    ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(""),
                       ),
+                      title: Text(movies[index]["title"]!),
+                      onTap: () {
+                        print(peliculasList[index]["video"]);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VideoPlayerScreen(
+                                videoUrl: peliculasList[index]["video"]),
+                          ),
+                        );
+                      },
                     );
                   },
                 );

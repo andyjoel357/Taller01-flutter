@@ -17,19 +17,19 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.black,
-        colorScheme: ColorScheme.light(
-          secondary: Colors.redAccent, // Set the accent color here
-        ),
         textTheme: const TextTheme(
           headlineLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           bodyMedium: TextStyle(fontSize: 18),
         ),
+        colorScheme: ColorScheme.light(
+          secondary: Colors.redAccent, // Set the accent color here
+        ).copyWith(background: Colors.blue),
       ),
       home: Home(),
     );
   }
 }
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -61,7 +61,10 @@ Widget Cuerpo(context) {
         Text(
           "Este es un servicio de streaming que ofrece una gran variedad de películas, series y documentales premiados en casi cualquier pantalla conectada a internet",
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineLarge,
+          style: Theme.of(context)
+              .textTheme
+              .headlineLarge
+              ?.copyWith(color: Colors.white),
         ),
         SizedBox(height: 40), // espacio entre el texto y los botones
         IniciarSecion(context),
@@ -79,10 +82,10 @@ Widget IniciarSecion(context) {
       onPressed: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => Aplicacion02()));
       },
-      child: Text("Iniciar Sesión"),
+      child: Text("Iniciar Sesión", style: TextStyle(color: Colors.white)),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Theme.of(context).primaryColor, // Use backgroundColor instead of primary
-        foregroundColor: Colors.white, // Use foregroundColor instead of onPrimary
+        backgroundColor: Colors.blueAccent, // Cambia el color del fondo del botón
+        foregroundColor: Colors.white, // Cambia el color del texto
         elevation: 5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -97,12 +100,13 @@ Widget Registro(context) {
       onPressed: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => Registrarse()));
       },
-      child: Text("Registrarse"),
+      child: Text("Registrarse", style: TextStyle(color: Colors.white)),
       style: OutlinedButton.styleFrom(
-        foregroundColor: Theme.of(context).colorScheme.secondary, // Use foregroundColor instead of primary
-        side: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 2), // Use colorScheme.secondary instead of accentColor
+        foregroundColor: Colors.white, // Cambia el color del texto
+        side: BorderSide(color: Colors.blueAccent, width: 2), // Cambia el color del borde
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     ),
   );
 }
+

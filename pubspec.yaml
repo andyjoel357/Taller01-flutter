@@ -8,9 +8,11 @@ environment:
 
 dependencies:
   firebase_auth: ^5.1.0
+  firebase_database: ^11.0.1
   flutter:
     sdk: flutter
   video_player: ^2.8.7
+  youtube_player_flutter: ^9.0.1
 
 dev_dependencies:
   flutter_test:

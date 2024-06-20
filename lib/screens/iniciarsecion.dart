@@ -32,7 +32,6 @@ class _CuerpoState extends State<Cuerpo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Titulo superior")),
       body: Body(context),
     );
   }
@@ -41,10 +40,8 @@ class _CuerpoState extends State<Cuerpo> {
 Widget Body(context) {
   return Container(
     decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: NetworkImage(
-                "https://images3.alphacoders.com/132/1322308.jpeg"),
-            fit: BoxFit.cover)),
+      color: Colors.blue, // Cambia la imagen de fondo por un color azul
+    ),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -59,45 +56,56 @@ Widget Body(context) {
 final TextEditingController _user = TextEditingController();
 Widget Usuario() {
   return Container(
-      padding: EdgeInsets.all(20),
-      child: TextField(
-        controller: _user,
-        decoration: InputDecoration(
-            hintText: "Ingrese nickname", fillColor: Colors.grey, filled: true),
-      ));
+    padding: EdgeInsets.all(20),
+    child: TextField(
+      controller: _user,
+      decoration: InputDecoration(
+        hintText: "Ingrese nickname",
+        fillColor: Colors.white, // Cambia el color del fondo del campo de texto
+        filled: true,
+        border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget Password() {
+   return Container(
+    padding: EdgeInsets.all(20),
+    child: TextField(
+      controller: _pass,
+      obscureText: true,
+      decoration: InputDecoration(
+        hintText: "Ingrese Contraseña",
+        fillColor: Colors.white, // Cambia el color del fondo del campo de texto
+        filled: true,
+        border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    ),
+  );
 }
 
 final TextEditingController _pass = TextEditingController();
-Widget Password() {
-  return Column(
-    children: [
-      Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(60)),
-        padding: const EdgeInsets.all(20),
-        child: TextField(
-          controller: _pass,
-          obscureText: true,
-          decoration: const InputDecoration(
-            hintText: 'Ingrese Contraseña',
-            fillColor: Colors.grey,
-            filled: true,
-            border: InputBorder.none,
-          ),
-        ),
-      ),
-    ],
-  );
-}
 
 Widget Boton(context) {
   return Container(
     child: ElevatedButton(
-        onPressed: () {
-          //imprimir();
-          login(context);
-        },
-        child: Text("Login"),
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.amber)),
+      onPressed: () {
+        //imprimir();
+        login(context);
+      },
+      child: Text("Login"),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blueAccent, // Cambia el color del fondo del botón
+        foregroundColor: Colors.white, // Cambia el color del texto del botón
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    ),
   );
 }
 
