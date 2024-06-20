@@ -73,9 +73,8 @@ class _CartelerasState extends State<Carteleras> {
   }
   
 }
-
 class Body extends StatelessWidget {
-
+  final List<Map<dynamic, dynamic>> peliculasList;
   final List<Map<String, String>> movies = [
     {
       "title": "grand theft auto v",
@@ -98,7 +97,6 @@ class Body extends StatelessWidget {
 
     },
   ];
-  final List<Map<dynamic, dynamic>> peliculasList;
 
   Body({required this.peliculasList});
   @override
@@ -107,144 +105,25 @@ class Body extends StatelessWidget {
       appBar: AppBar(
         title: const Text(""),
       ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "",
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+      body: ListView.builder(
+        itemCount: peliculasList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(peliculasList[index]["imagen"]),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: movies.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      FutureBuilder(
-                        future: precacheImage(
-                          NetworkImage(""),
-                          context,
-                        ),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<void> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return SizedBox(
-                              width: 120,
-                              height: 180,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          } else if (snapshot.hasError) {
-                            return SizedBox(
-                              width: 120,
-                              height: 180,
-                              child: Center(
-                                child: Text(
-                                  "Error de carga de imagen",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ),
-                            );
-                          } else {
-                            return Container(
-                              width: 120,
-                              height: 180,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                image: DecorationImage(
-                                  image: NetworkImage(""),
-                                  fit: BoxFit.cover,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 2,
-                                    blurRadius: 7,
-                                    offset: Offset(
-                                        0, 3), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        movies[index]["title"]!,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Más Carteleras",
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: movies.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(movies[index]["image"]!),
-                  ),
-                  title: Text(movies[index]["title"]!),
-                  onTap: () {
-                        print(movies[index]["video"]);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VideoPlayerScreen(
-                                videoUrl: movies[index]["video"].toString()),
-                          ),
-                        );
-                    ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(""),
-                      ),
-                      title: Text(movies[index]["title"]!),
-                      onTap: () {
-                        print(peliculasList[index]["video"]);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VideoPlayerScreen(
-                                videoUrl: peliculasList[index]["video"]),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
+            title: Text(peliculasList[index]["titulo"]),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => VideoPlayerScreen(
+                      videoUrl: peliculasList[index]["video"]),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
