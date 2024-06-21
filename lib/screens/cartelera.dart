@@ -216,6 +216,7 @@ class Body extends StatelessWidget {
                   title: Text(movies[index]["title"]!),
                   onTap: () {
                         print(movies[index]["video"]);
+                        print("Holaaaaaaa");
                         Navigator.push(
                           context,
                           MaterialPageRoute(
