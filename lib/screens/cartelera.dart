@@ -224,11 +224,26 @@ class Body extends StatelessWidget {
                   ),
                   title: Text(movies[index]["title"]!),
                   onTap: () {
+<<<<<<< HEAD
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => VideoPlayerScreen(
                             videoUrl: movies[index]["video"].toString()),
+=======
+                        print(movies[index]["video"]);
+                        print("Holaaaaaaa");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VideoPlayerScreen(
+                                videoUrl: movies[index]["video"].toString()),
+                          ),
+                        );
+                    ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(""),
+>>>>>>> 0fb681810959a85ca35fd27f1c66f314d3b7150d
                       ),
                     );
                   },
